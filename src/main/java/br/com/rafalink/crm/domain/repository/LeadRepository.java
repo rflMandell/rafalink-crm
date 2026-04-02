@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface LeadRepository {
+public interface LeadRepository extends JpaRepository<Lead, Long> {
 
     boolean existsByEmail(String email);
 
     List<Lead> findByStatus(StatusLead status);
 
-    // leads inativos ha mais de 90 dias
+    // Regra RN06: leads inativos há mais de 90 dias
     @Query("""
         SELECT l FROM Lead l
         WHERE l.arquivado = false
