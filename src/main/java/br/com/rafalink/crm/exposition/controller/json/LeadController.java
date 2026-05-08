@@ -1,4 +1,4 @@
-package br.com.rafalink.crm.exposition.controller;
+package br.com.rafalink.crm.exposition.controller.json;
 
 import br.com.rafalink.crm.application.service.LeadService;
 import br.com.rafalink.crm.domain.model.Lead;
@@ -13,6 +13,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * JSONController — Leads
+ *
+ * Endpoints disponíveis:
+ *   POST   /api/leads                          → cadastrar lead              → 201 Created
+ *   GET    /api/leads                          → listar todos os leads       → 200 OK
+ *   GET    /api/leads/{id}                     → buscar por ID               → 200 OK | 404 Not Found
+ *   GET    /api/leads/status/{status}          → listar por status           → 200 OK
+ *   PATCH  /api/leads/{id}/status?novoStatus=  → atualizar status            → 200 OK | 422 Unprocessable
+ *   PATCH  /api/leads/arquivar-inativos        → arquivar leads inativos (RN06) → 200 OK
+ */
 @RestController
 @RequestMapping("/api/leads")
 @RequiredArgsConstructor
@@ -29,7 +40,8 @@ public class LeadController {
                 .origem(request.origem())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
                 .body(LeadResponse.from(leadService.cadastrar(lead)));
     }
 

@@ -1,4 +1,4 @@
-package br.com.rafalink.crm.exposition.controller;
+package br.com.rafalink.crm.exposition.controller.json;
 
 import br.com.rafalink.crm.application.service.CampanhaService;
 import br.com.rafalink.crm.domain.model.Campanha;
@@ -12,6 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * JSONController — Campanhas
+ *
+ * Endpoints disponíveis:
+ *   POST   /api/campanhas              → criar campanha           → 201 Created
+ *   GET    /api/campanhas              → listar campanhas ativas  → 200 OK
+ *   GET    /api/campanhas/todas        → listar todas campanhas   → 200 OK
+ *   GET    /api/campanhas/{id}         → buscar por ID            → 200 OK | 404 Not Found
+ *   PATCH  /api/campanhas/{id}/encerrar → encerrar campanha       → 200 OK | 422 Unprocessable
+ */
 @RestController
 @RequestMapping("/api/campanhas")
 @RequiredArgsConstructor
@@ -29,7 +39,8 @@ public class CampanhaController {
                 .fim(request.fim())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
                 .body(CampanhaResponse.from(campanhaService.criar(campanha)));
     }
 

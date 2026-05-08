@@ -1,7 +1,6 @@
-package br.com.rafalink.crm.exposition.controller;
+package br.com.rafalink.crm.exposition.controller.json;
 
 import br.com.rafalink.crm.application.service.UsuarioService;
-import br.com.rafalink.crm.domain.model.PerfilUsuario;
 import br.com.rafalink.crm.domain.model.Usuario;
 import br.com.rafalink.crm.exposition.dto.UsuarioRequest;
 import br.com.rafalink.crm.exposition.dto.UsuarioResponse;
@@ -13,6 +12,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * JSONController — Usuários
+ *
+ * Endpoints disponíveis:
+ *   POST   /api/usuarios               → cadastrar usuário         → 201 Created
+ *   GET    /api/usuarios               → listar todos os usuários  → 200 OK
+ *   GET    /api/usuarios/{id}          → buscar por ID             → 200 OK | 404 Not Found
+ *   PATCH  /api/usuarios/{id}/desativar → desativar usuário        → 200 OK | 422 Unprocessable
+ */
 @RestController
 @RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
@@ -29,7 +37,8 @@ public class UsuarioController {
                 .perfil(request.perfil())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
                 .body(UsuarioResponse.from(usuarioService.cadastrar(usuario)));
     }
 

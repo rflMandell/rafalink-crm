@@ -1,4 +1,4 @@
-package br.com.rafalink.crm.exposition.controller;
+package br.com.rafalink.crm.exposition.controller.json;
 
 import br.com.rafalink.crm.application.service.AgendamentoService;
 import br.com.rafalink.crm.application.service.LeadService;
@@ -14,6 +14,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * JSONController — Agendamentos
+ *
+ * Endpoints disponíveis:
+ *   POST   /api/agendamentos              → criar agendamento          → 201 Created
+ *   GET    /api/agendamentos/{id}         → buscar por ID              → 200 OK | 404 Not Found
+ *   GET    /api/agendamentos/usuario/{id} → listar por usuário         → 200 OK
+ *   GET    /api/agendamentos/lead/{id}    → listar por lead            → 200 OK
+ *   PATCH  /api/agendamentos/{id}/cancelar → cancelar agendamento      → 200 OK | 422 Unprocessable
+ */
 @RestController
 @RequestMapping("/api/agendamentos")
 @RequiredArgsConstructor
@@ -26,14 +36,15 @@ public class AgendamentoController {
     @PostMapping
     public ResponseEntity<AgendamentoResponse> criar(@RequestBody @Valid AgendamentoRequest request) {
         Agendamento agendamento = Agendamento.builder()
-                .Titulo(request.titulo())
+                .titulo(request.titulo())
                 .descricao(request.descricao())
                 .dataHora(request.dataHora())
                 .usuario(usuarioService.buscarPorId(request.usuarioId()))
                 .lead(request.leadId() != null ? leadService.buscarPorId(request.leadId()) : null)
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
                 .body(AgendamentoResponse.from(agendamentoService.criar(agendamento)));
     }
 
@@ -45,6 +56,13 @@ public class AgendamentoController {
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<AgendamentoResponse>> listarPorUsuario(@PathVariable Long usuarioId) {
         List<AgendamentoResponse> lista = agendamentoService.listarPorUsuario(usuarioId)
+                .stream().map(AgendamentoResponse::from).toList();
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/lead/{leadId}")
+    public ResponseEntity<List<AgendamentoResponse>> listarPorLead(@PathVariable Long leadId) {
+        List<AgendamentoResponse> lista = agendamentoService.listarPorLead(leadId)
                 .stream().map(AgendamentoResponse::from).toList();
         return ResponseEntity.ok(lista);
     }

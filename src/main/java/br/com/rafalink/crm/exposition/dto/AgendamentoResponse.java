@@ -12,7 +12,9 @@ public record AgendamentoResponse(
         LocalDateTime dataHora,
         StatusAgendamento status,
         Long leadId,
+        String leadNome,
         Long usuarioId,
+        String usuarioNome,
         LocalDateTime criadoEm
 ) {
     public static AgendamentoResponse from(Agendamento a) {
@@ -23,7 +25,9 @@ public record AgendamentoResponse(
                 a.getDataHora(),
                 a.getStatus(),
                 a.getLead() != null ? a.getLead().getId() : null,
+                a.getLead() != null ? a.getLead().getNome() : null,
                 a.getUsuario() != null ? a.getUsuario().getId() : null,
+                a.getUsuario() != null ? a.getUsuario().getNome() : null,
                 a.getCriadoEm()
         );
     }

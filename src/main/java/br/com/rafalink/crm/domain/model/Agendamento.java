@@ -18,7 +18,7 @@ public class Agendamento {
     private Long id;
 
     @Column(nullable = false, length = 150)
-    private String Titulo;
+    private String titulo;
 
     @Column(columnDefinition = "TEXT")
     private String descricao;
