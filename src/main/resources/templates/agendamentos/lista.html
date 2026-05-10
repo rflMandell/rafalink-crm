@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Agendamentos', ~{::conteudo})}">
+<body>
+<th:block th:fragment="conteudo">
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h5 class="fw-bold mb-1">Agendamentos</h5>
+            <p class="text-muted mb-0" style="font-size:.9rem;">
+                Reuniões, consultas e compromissos do CRM
+            </p>
+        </div>
+        <a th:href="@{/view/agendamentos/novo}" class="btn btn-brand btn-sm px-3">
+            <i class="bi bi-plus-lg me-1"></i> Novo Agendamento
+        </a>
+    </div>
+
+    <!-- Endpoint info -->
+    <div class="alert alert-light border mb-4" style="font-size:.82rem;">
+        <strong><i class="bi bi-braces me-1"></i>Endpoints JSON deste domínio:</strong>
+        <code class="ms-2">POST /api/agendamentos</code> ·
+        <code>GET /api/agendamentos/{id}</code> ·
+        <code>GET /api/agendamentos/usuario/{id}</code> ·
+        <code>GET /api/agendamentos/lead/{id}</code> ·
+        <code>PATCH /api/agendamentos/{id}/cancelar</code>
+    </div>
+
+    <!-- Filtro por usuário -->
+    <div class="form-card mb-4 py-3">
+        <form th:action="@{/view/agendamentos}" method="get"
+              class="d-flex align-items-center gap-3 flex-wrap">
+            <label class="fw-semibold mb-0" style="font-size:.9rem;">
+                <i class="bi bi-funnel me-1"></i>Filtrar por usuário:
+            </label>
+            <select name="usuarioId" class="form-select form-select-sm" style="max-width:220px;">
+                <option value="">Todos</option>
+                <option th:each="u : ${usuarios}"
+                        th:value="${u.id}"
+                        th:text="${u.nome}"
+                        th:selected="${u.id == usuarioFiltro}">
+                </option>
+            </select>
+            <button type="submit" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-search me-1"></i>Filtrar
+            </button>
+            <a th:href="@{/view/agendamentos}" class="btn btn-sm btn-link text-muted">Limpar</a>
+        </form>
+    </div>
+
+    <div class="table-card">
+        <div class="p-3 border-bottom">
+            <span class="fw-semibold" style="font-size:.9rem;">
+                <i class="bi bi-calendar3 me-2"></i>
+                <span th:text="${agendamentos.size()} + ' agendamento(s)'">0</span>
+            </span>
+        </div>
+        <div th:if="${#lists.isEmpty(agendamentos)}" class="p-5 text-center text-muted">
+            <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
+            Nenhum agendamento encontrado.
+        </div>
+        <table class="table table-hover" th:if="${!#lists.isEmpty(agendamentos)}">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Título</th>
+                    <th>Data / Hora</th>
+                    <th>Responsável</th>
+                    <th>Lead vinculado</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="a : ${agendamentos}">
+                    <td class="text-muted" th:text="${a.id}"></td>
+                    <td class="fw-semibold" th:text="${a.titulo}"></td>
+                    <td th:text="${#temporals.format(a.dataHora, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${a.usuarioNome ?: '—'}"></td>
+                    <td th:text="${a.leadNome ?: '—'}"></td>
+                    <td>
+                        <span class="badge rounded-pill px-2 py-1"
+                              th:text="${a.status}"
+                              th:classappend="'badge-' + ${a.status.name().toLowerCase()}">
+                        </span>
+                    </td>
+                    <td>
+                        <a th:href="@{'/view/agendamentos/' + ${a.id}}"
+                           class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</th:block>
+</body>
+</html>

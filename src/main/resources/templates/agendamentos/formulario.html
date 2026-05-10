@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Novo Agendamento', ~{::conteudo})}">
+<body>
+<th:block th:fragment="conteudo">
+
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <a th:href="@{/view/agendamentos}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <h5 class="fw-bold mb-0">Novo Agendamento</h5>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-card">
+                <form th:action="@{/view/agendamentos}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:.9rem;">Título</label>
+                        <input type="text" name="titulo" class="form-control"
+                               placeholder="Ex: Reunião de alinhamento" required/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:.9rem;">
+                            Descrição <span class="text-muted fw-normal">(opcional)</span>
+                        </label>
+                        <textarea name="descricao" class="form-control" rows="3"
+                                  placeholder="Detalhes sobre o agendamento..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:.9rem;">Data e Hora</label>
+                        <input type="datetime-local" name="dataHora" class="form-control" required/>
+                        <div class="form-text">Deve ser uma data/hora futura.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:.9rem;">Responsável</label>
+                        <select name="usuarioId" class="form-select" required>
+                            <option value="">Selecione o usuário...</option>
+                            <option th:each="u : ${usuarios}"
+                                    th:value="${u.id}"
+                                    th:text="${u.nome} + ' (' + ${u.perfil} + ')'">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold" style="font-size:.9rem;">
+                            Lead vinculado <span class="text-muted fw-normal">(opcional)</span>
+                        </label>
+                        <select name="leadId" class="form-select">
+                            <option value="">Nenhum</option>
+                            <option th:each="l : ${leads}"
+                                    th:value="${l.id}"
+                                    th:text="${l.nome} + ' — ' + ${l.status}"
+                                    th:disabled="${l.arquivado}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-brand px-4">
+                            <i class="bi bi-check-lg me-1"></i> Agendar
+                        </button>
+                        <a th:href="@{/view/agendamentos}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-card">
+                <h6 class="fw-semibold mb-3"><i class="bi bi-braces me-2"></i>Endpoint equivalente</h6>
+                <div class="p-3 rounded mb-3" style="background:#1e293b;">
+                    <code style="color:#a5f3fc; font-size:.82rem; white-space:pre-wrap;">POST /api/agendamentos
+Content-Type: application/json
+
+{
+  "titulo": "string",
+  "descricao": "string | null",
+  "dataHora": "2025-12-01T10:00:00",
+  "usuarioId": 1,
+  "leadId": 2
+}</code>
+                </div>
+                <p class="text-muted" style="font-size:.82rem;">
+                    <i class="bi bi-check-circle text-success me-1"></i> <strong>201 Created</strong> — agendamento criado<br>
+                    <i class="bi bi-x-circle text-danger me-1"></i> <strong>422 Unprocessable</strong> — data passada ou regra violada<br>
+                    <i class="bi bi-x-circle text-danger me-1"></i> <strong>404 Not Found</strong> — usuário ou lead inexistente
+                </p>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+</body>
+</html>

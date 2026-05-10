@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Campanhas', ~{::conteudo})}">
+<body>
+<th:block th:fragment="conteudo">
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h5 class="fw-bold mb-1">Campanhas</h5>
+            <p class="text-muted mb-0" style="font-size:.9rem;">
+                Gerencie campanhas de marketing por canal
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a th:href="@{/view/campanhas/todas}"
+               th:classappend="${!exibindoAtivas} ? 'btn-brand' : 'btn-outline-secondary'"
+               class="btn btn-sm">
+                <i class="bi bi-collection me-1"></i> Todas
+            </a>
+            <a th:href="@{/view/campanhas}"
+               th:classappend="${exibindoAtivas} ? 'btn-brand' : 'btn-outline-secondary'"
+               class="btn btn-sm">
+                <i class="bi bi-circle-fill me-1" style="font-size:.5rem;"></i> Ativas
+            </a>
+            <a th:href="@{/view/campanhas/nova}" class="btn btn-brand btn-sm px-3">
+                <i class="bi bi-plus-lg me-1"></i> Nova Campanha
+            </a>
+        </div>
+    </div>
+
+    <!-- Endpoint info -->
+    <div class="alert alert-light border mb-4" style="font-size:.82rem;">
+        <strong><i class="bi bi-braces me-1"></i>Endpoints JSON deste domínio:</strong>
+        <code class="ms-2">POST /api/campanhas</code> ·
+        <code>GET /api/campanhas</code> ·
+        <code>GET /api/campanhas/todas</code> ·
+        <code>GET /api/campanhas/{id}</code> ·
+        <code>PATCH /api/campanhas/{id}/encerrar</code>
+    </div>
+
+    <div class="table-card">
+        <div class="p-3 border-bottom">
+            <span class="fw-semibold" style="font-size:.9rem;">
+                <i class="bi bi-megaphone me-2"></i>
+                <span th:text="${campanhas.size()} + ' campanha(s)'">0</span>
+                <span th:if="${exibindoAtivas}" class="text-success ms-1" style="font-size:.82rem;">— somente ativas</span>
+                <span th:unless="${exibindoAtivas}" class="text-muted ms-1" style="font-size:.82rem;">— todas</span>
+            </span>
+        </div>
+        <div th:if="${#lists.isEmpty(campanhas)}" class="p-5 text-center text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            Nenhuma campanha encontrada.
+        </div>
+        <table class="table table-hover" th:if="${!#lists.isEmpty(campanhas)}">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Canal</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="c : ${campanhas}">
+                    <td class="text-muted" th:text="${c.id}"></td>
+                    <td class="fw-semibold" th:text="${c.nome}"></td>
+                    <td>
+                        <span class="badge rounded-pill px-2 py-1"
+                              th:text="${c.canal}"
+                              th:classappend="${c.canal.name() == 'EMAIL'} ? 'bg-primary' :
+                                             (${c.canal.name() == 'WHATSAPP'} ? 'bg-success' :
+                                             (${c.canal.name() == 'SMS'} ? 'bg-warning text-dark' : 'bg-info text-dark'))">
+                        </span>
+                    </td>
+                    <td th:text="${#temporals.format(c.inicio, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${c.fim != null} ? ${#temporals.format(c.fim, 'dd/MM/yyyy')} : '—'"></td>
+                    <td>
+                        <span class="badge rounded-pill px-2 py-1"
+                              th:classappend="${c.ativa} ? 'badge-ativo' : 'badge-inativo'"
+                              th:text="${c.ativa} ? 'Ativa' : 'Encerrada'">
+                        </span>
+                    </td>
+                    <td>
+                        <a th:href="@{'/view/campanhas/' + ${c.id}}"
+                           class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-eye"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</th:block>
+</body>
+</html>

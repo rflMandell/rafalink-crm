@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(titulo, conteudo)">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:text="'RafaLink CRM — ' + ${titulo}">RafaLink CRM</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"/>
+  <style>
+    :root{--sw:240px;--brand:#4f46e5;--bdark:#3730a3;--sbg:#1e1b4b;--stxt:#c7d2fe;}
+    body{background:#f1f5f9;font-family:'Segoe UI',sans-serif;}
+    #sidebar{position:fixed;top:0;left:0;width:var(--sw);height:100vh;background:var(--sbg);display:flex;flex-direction:column;z-index:1000;overflow-y:auto;}
+    #sidebar .brand{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid #312e81;}
+    #sidebar .brand h5{color:#fff;font-weight:700;margin:0;font-size:1.1rem;}
+    #sidebar .brand small{color:var(--stxt);font-size:.75rem;}
+    #sidebar .nav-label{padding:.75rem 1.25rem .25rem;color:#6366f1;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;}
+    #sidebar .nav-link{color:var(--stxt);padding:.6rem 1.25rem;border-radius:6px;margin:2px 8px;display:flex;align-items:center;gap:.6rem;font-size:.9rem;transition:all .15s;}
+    #sidebar .nav-link:hover{background:#312e81;color:#fff;}
+    #sidebar .nav-link.active{background:var(--brand);color:#fff;}
+    #sidebar .nav-link i{font-size:1rem;width:20px;}
+    #sidebar .sf{margin-top:auto;padding:1rem 1.25rem;border-top:1px solid #312e81;color:var(--stxt);font-size:.78rem;}
+    #main{margin-left:var(--sw);min-height:100vh;}
+    .topbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+    .topbar h6{margin:0;font-weight:600;color:#1e293b;}
+    .ca{padding:1.75rem;}
+    .stat-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem;}
+    .si{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+    .stat-card h4{margin:0;font-weight:700;font-size:1.6rem;color:#1e293b;}
+    .stat-card p{margin:0;font-size:.83rem;color:#64748b;}
+    .table-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;}
+    .table-card .table{margin-bottom:0;}
+    .table thead th{background:#f8fafc;font-size:.8rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#64748b;border-bottom:1px solid #e2e8f0;}
+    .table tbody tr:hover{background:#f8fafc;}
+    .badge-novo{background:#dbeafe;color:#1e40af;}
+    .badge-em_contato{background:#fef9c3;color:#854d0e;}
+    .badge-convertido{background:#dcfce7;color:#166534;}
+    .badge-perdido{background:#fee2e2;color:#991b1b;}
+    .badge-agendado{background:#dbeafe;color:#1e40af;}
+    .badge-realizado{background:#dcfce7;color:#166534;}
+    .badge-cancelado{background:#fee2e2;color:#991b1b;}
+    .badge-ativo{background:#dcfce7;color:#166534;}
+    .badge-inativo{background:#fee2e2;color:#991b1b;}
+    .form-card{background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:1.75rem;}
+    .btn-brand{background:var(--brand);border-color:var(--brand);color:#fff;}
+    .btn-brand:hover{background:var(--bdark);border-color:var(--bdark);color:#fff;}
+  </style>
+</head>
+<body>
+<nav id="sidebar">
+  <div class="brand"><h5><i class="bi bi-diagram-3-fill me-2"></i>RafaLink CRM</h5><small>Inteligência em Relacionamentos</small></div>
+  <div class="nav-label">Menu</div>
+  <a th:href="@{/view}" th:classappend="${paginaAtiva=='home'}?'active':''" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+  <div class="nav-label">Domínios</div>
+  <a th:href="@{/view/usuarios}" th:classappend="${paginaAtiva=='usuarios'}?'active':''" class="nav-link"><i class="bi bi-people-fill"></i> Usuários</a>
+  <a th:href="@{/view/leads}" th:classappend="${paginaAtiva=='leads'}?'active':''" class="nav-link"><i class="bi bi-funnel-fill"></i> Leads</a>
+  <a th:href="@{/view/agendamentos}" th:classappend="${paginaAtiva=='agendamentos'}?'active':''" class="nav-link"><i class="bi bi-calendar3"></i> Agendamentos</a>
+  <a th:href="@{/view/campanhas}" th:classappend="${paginaAtiva=='campanhas'}?'active':''" class="nav-link"><i class="bi bi-megaphone-fill"></i> Campanhas</a>
+  <div class="nav-label">API</div>
+  <a href="/api/usuarios" target="_blank" class="nav-link"><i class="bi bi-braces"></i> Endpoints JSON</a>
+  <div class="sf"><i class="bi bi-mortarboard-fill me-1"></i>FIAP — 4° Sem · Sprint 4</div>
+</nav>
+<div id="main">
+  <div class="topbar">
+    <h6 th:text="${titulo}">Página</h6>
+    <span class="text-muted" style="font-size:.82rem;"><i class="bi bi-circle-fill text-success me-1" style="font-size:.5rem;"></i>API em <code>/api</code></span>
+  </div>
+  <div class="ca">
+    <div th:if="${sucesso}" class="alert alert-success alert-dismissible fade show d-flex gap-2" role="alert">
+      <i class="bi bi-check-circle-fill"></i><span th:text="${sucesso}"></span>
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${erro}" class="alert alert-danger alert-dismissible fade show d-flex gap-2" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i><span th:text="${erro}"></span>
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+    </div>
+    <th:block th:replace="${conteudo}"/>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

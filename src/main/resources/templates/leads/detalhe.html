@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Detalhe do Lead', ~{::conteudo})}">
+<body>
+<th:block th:fragment="conteudo">
+
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <a th:href="@{/view/leads}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <h5 class="fw-bold mb-0">Detalhe do Lead</h5>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-7">
+            <div class="form-card">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="stat-icon" style="background:#dbeafe; width:56px; height:56px;">
+                        <i class="bi bi-person-lines-fill fs-4" style="color:#2563eb;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0 fw-bold" th:text="${lead.nome}"></h5>
+                        <small class="text-muted" th:text="${lead.email}"></small>
+                    </div>
+                    <span class="badge rounded-pill px-3 py-2 ms-auto"
+                          th:text="${lead.status}"
+                          th:classappend="'badge-' + ${lead.status.name().toLowerCase()}">
+                    </span>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-6">
+                        <label class="text-muted" style="font-size:.78rem; font-weight:600;">ID</label>
+                        <p class="mb-0 fw-semibold" th:text="'#' + ${lead.id}"></p>
+                    </div>
+                    <div class="col-6">
+                        <label class="text-muted" style="font-size:.78rem; font-weight:600;">TELEFONE</label>
+                        <p class="mb-0" th:text="${lead.telefone ?: '—'}"></p>
+                    </div>
+                    <div class="col-6">
+                        <label class="text-muted" style="font-size:.78rem; font-weight:600;">ORIGEM</label>
+                        <p class="mb-0" th:text="${lead.origem ?: '—'}"></p>
+                    </div>
+                    <div class="col-6">
+                        <label class="text-muted" style="font-size:.78rem; font-weight:600;">ARQUIVADO</label>
+                        <p class="mb-0">
+                            <span th:if="${lead.arquivado}" class="badge bg-secondary">Sim</span>
+                            <span th:unless="${lead.arquivado}" class="text-muted">Não</span>
+                        </p>
+                    </div>
+                    <div class="col-6">
+                        <label class="text-muted" style="font-size:.78rem; font-weight:600;">CADASTRADO EM</label>
+                        <p class="mb-0" th:text="${#temporals.format(lead.criadoEm, 'dd/MM/yyyy HH:mm')}"></p>
+                    </div>
+                    <div class="col-6">
+                        <label class="text-muted" style="font-size:.78rem; font-weight:600;">ATUALIZADO EM</label>
+                        <p class="mb-0" th:text="${#temporals.format(lead.atualizadoEm, 'dd/MM/yyyy HH:mm')}"></p>
+                    </div>
+                </div>
+
+                <!-- Atualizar status -->
+                <div th:unless="${lead.arquivado}" class="mt-4 pt-3 border-top">
+                    <p class="fw-semibold mb-2" style="font-size:.9rem;">Atualizar status</p>
+                    <form th:action="@{'/view/leads/' + ${lead.id} + '/status'}" method="post"
+                          class="d-flex gap-2 align-items-center">
+                        <select name="novoStatus" class="form-select form-select-sm" style="max-width:200px;" required>
+                            <option th:each="s : ${statusOpcoes}"
+                                    th:value="${s}" th:text="${s}"
+                                    th:selected="${s == lead.status}">
+                            </option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-brand">
+                            <i class="bi bi-arrow-repeat me-1"></i> Atualizar
+                        </button>
+                    </form>
+                    <small class="text-muted">RN02: apenas um status por lead.</small>
+                </div>
+                <div th:if="${lead.arquivado}" class="mt-4 pt-3 border-top">
+                    <p class="text-muted small mb-0">
+                        <i class="bi bi-archive me-1"></i>
+                        Lead arquivado — status não pode ser alterado (RN06).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="form-card h-100">
+                <h6 class="fw-semibold mb-3"><i class="bi bi-braces me-2"></i>Endpoints JSON</h6>
+                <div class="mb-3">
+                    <span class="badge bg-success me-2">GET</span>
+                    <code th:text="'/api/leads/' + ${lead.id}" style="font-size:.82rem;"></code>
+                    <p class="text-muted mt-1 mb-0" style="font-size:.8rem;">Retorna dados do lead em JSON</p>
+                </div>
+                <div class="mb-3">
+                    <span class="badge bg-warning text-dark me-2">PATCH</span>
+                    <code th:text="'/api/leads/' + ${lead.id} + '/status?novoStatus=EM_CONTATO'" style="font-size:.82rem;"></code>
+                    <p class="text-muted mt-1 mb-0" style="font-size:.8rem;">Atualiza status · 200 OK ou 422</p>
+                </div>
+                <div class="p-3 rounded mt-3" style="background:#f0fdf4; border:1px solid #bbf7d0;">
+                    <p class="mb-1 fw-semibold" style="font-size:.82rem; color:#166534;">Regras de negócio</p>
+                    <p class="mb-0 text-muted" style="font-size:.78rem;">
+                        <strong>RN02</strong> — apenas um status por lead<br>
+                        <strong>RN06</strong> — leads inativos &gt; 90 dias são arquivados
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+</body>
+</html>

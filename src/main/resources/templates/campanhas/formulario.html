@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout('Nova Campanha', ~{::conteudo})}">
+<body>
+<th:block th:fragment="conteudo">
+
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <a th:href="@{/view/campanhas}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i>
+        </a>
+        <h5 class="fw-bold mb-0">Nova Campanha</h5>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-card">
+                <form th:action="@{/view/campanhas}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:.9rem;">Nome da campanha</label>
+                        <input type="text" name="nome" class="form-control"
+                               placeholder="Ex: Black Friday 2025" required/>
+                        <div class="form-text">Deve ser único no sistema.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:.9rem;">
+                            Descrição <span class="text-muted fw-normal">(opcional)</span>
+                        </label>
+                        <textarea name="descricao" class="form-control" rows="3"
+                                  placeholder="Objetivo e detalhes da campanha..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:.9rem;">Canal</label>
+                        <select name="canal" class="form-select" required>
+                            <option value="">Selecione o canal...</option>
+                            <option th:each="c : ${canais}" th:value="${c}" th:text="${c}"></option>
+                        </select>
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold" style="font-size:.9rem;">Data de início</label>
+                            <input type="date" name="inicio" class="form-control" required/>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold" style="font-size:.9rem;">
+                                Data de fim <span class="text-muted fw-normal">(opcional)</span>
+                            </label>
+                            <input type="date" name="fim" class="form-control"/>
+                            <div class="form-text">Não pode ser anterior à data de início.</div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-brand px-4">
+                            <i class="bi bi-check-lg me-1"></i> Criar campanha
+                        </button>
+                        <a th:href="@{/view/campanhas}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-card">
+                <h6 class="fw-semibold mb-3"><i class="bi bi-braces me-2"></i>Endpoint equivalente</h6>
+                <div class="p-3 rounded mb-3" style="background:#1e293b;">
+                    <code style="color:#a5f3fc; font-size:.82rem; white-space:pre-wrap;">POST /api/campanhas
+Content-Type: application/json
+
+{
+  "nome": "string",
+  "descricao": "string | null",
+  "canal": "EMAIL | WHATSAPP | SMS | REDES_SOCIAIS",
+  "inicio": "2025-11-01",
+  "fim": "2025-11-30"
+}</code>
+                </div>
+                <p class="text-muted" style="font-size:.82rem;">
+                    <i class="bi bi-check-circle text-success me-1"></i> <strong>201 Created</strong> — campanha criada e ativa<br>
+                    <i class="bi bi-x-circle text-danger me-1"></i> <strong>422 Unprocessable</strong> — nome duplicado ou datas inválidas<br>
+                    <i class="bi bi-x-circle text-danger me-1"></i> <strong>400 Bad Request</strong> — dados inválidos
+                </p>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+</body>
+</html>
