@@ -1,19 +1,19 @@
-# RafaLink CRM — Sprint 4
+# RafaLink CRM
 
 > **Inteligência em Relacionamentos e Vendas**
 > FIAP — Engenharia de Software · 4° Semestre · Domain Driven Design — Java/Spring
 
 **Integrantes:**
 
-| Nome | RM |
-|---|---|
-| Felipe Silva do Prado Lima | 559848 |
-| Luís Felipe Crivellaro | 560877 |
-| Rafael Mandel | 560333 |
+| Nome | RM       |
+|---|----------|
+| Felipe Silva do Prado Lima | RM559848 |
+| Luís Felipe Crivellaro | RM560877 |
+| Rafael Mandel | RM560333 |
 
 ---
 
-## 🗂 Estrutura do projeto
+## Estrutura do projeto
 
 ```
 src/main/java/br/com/rafalink/crm/
@@ -38,7 +38,7 @@ src/main/java/br/com/rafalink/crm/
 │   │   ├── StatusAgendamento.java
 │   │   ├── StatusLead.java
 │   │   └── Usuario.java
-│   └── repository/                     ← Interfaces JPA (Spring Data)
+│   └── repository/                     ← Interfaces JPA
 │       ├── AgendamentoRepository.java
 │       ├── CampanhaRepository.java
 │       ├── LeadRepository.java
@@ -67,7 +67,7 @@ src/main/resources/
 ├── db/migration/                       ← Flyway: V1 a V5
 └── templates/
     ├── layout/
-    │   └── base.html                   ← Layout base (sidebar + topbar Bootstrap 5)
+    │   └── base.html                   ← Layout base
     ├── home.html                       ← Dashboard com métricas e docs de endpoints
     ├── usuarios/
     │   ├── lista.html
@@ -89,7 +89,7 @@ src/main/resources/
 
 ---
 
-## ▶️ Como executar
+## Como executar
 
 ### Pré-requisitos
 
@@ -103,17 +103,7 @@ src/main/resources/
 CREATE DATABASE rafalink_crm;
 ```
 
-### 2. Configurar credenciais
-
-Edite `src/main/resources/application.properties` se necessário:
-
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/rafalink_crm
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-```
-
-### 3. Executar
+### 2. Executar
 
 ```bash
 ./mvnw spring-boot:run
@@ -121,7 +111,7 @@ spring.datasource.password=postgres
 
 O Flyway aplica as migrations automaticamente na primeira execução.
 
-### 4. Acessar
+### 3. Acessar
 
 | Interface | URL |
 |---|---|
@@ -130,7 +120,7 @@ O Flyway aplica as migrations automaticamente na primeira execução.
 
 ---
 
-## 🖥 Rotas das Views (Thymeleaf)
+## Rotas das Views (Thymeleaf)
 
 Páginas renderizadas server-side. Cada página exibe também os endpoints JSON equivalentes, servindo como documentação de uso.
 
@@ -180,7 +170,7 @@ Páginas renderizadas server-side. Cada página exibe também os endpoints JSON 
 
 ---
 
-## 🔌 Endpoints JSON (API REST)
+## Endpoints JSON (API REST)
 
 Retornam `application/json`. Consulte o Dashboard em `/view` para documentação visual completa.
 
@@ -272,7 +262,7 @@ Retornam `application/json`. Consulte o Dashboard em `/view` para documentação
 
 ---
 
-## ⚠️ Códigos de retorno
+## Códigos de retorno
 
 | Código | Significado |
 |---|---|
@@ -285,7 +275,7 @@ Retornam `application/json`. Consulte o Dashboard em `/view` para documentação
 
 ---
 
-## 📋 Regras de negócio implementadas
+## Regras de negócio implementadas
 
 | Código | Regra |
 |---|---|
@@ -300,7 +290,7 @@ Retornam `application/json`. Consulte o Dashboard em `/view` para documentação
 
 ---
 
-## 🗃 Migrations Flyway
+## Migrations Flyway
 
 | Versão | Arquivo | Descrição |
 |---|---|---|
@@ -312,7 +302,7 @@ Retornam `application/json`. Consulte o Dashboard em `/view` para documentação
 
 ---
 
-## 🛠 Stack tecnológica
+## Stack tecnológica
 
 | Camada | Tecnologia |
 |---|---|
